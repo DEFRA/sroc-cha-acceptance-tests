@@ -12,9 +12,13 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "node index.js"
+    "test": "node index.js",
+    "lint": "standard"
   },
   "dependencies": {
     "newman": "^5.2.1"
+  },
+  "devDependencies": {
+    "standard": "^16.0.3"
   }
 }

@@ -1,5 +1,8 @@
 # SROC Charging Module API Acceptance tests
 
+![Build Status](https://github.com/DEFRA/sroc-cha-acceptance-tests/workflows/CI/badge.svg?branch=main)
+[![Licence](https://img.shields.io/badge/Licence-OGLv3-blue.svg)](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3)
+
 The [Charging Module API](https://github.com/defra/charging-module-api) provides an interface for calculating charges, creating and queuing transactions, and generating transaction and customer files used to produce Environment Agency invoices.
 
 This project contains acceptance tests for the service. It is built using [Newman](https://github.com/postmanlabs/newman) and the [Postman App](https://www.postman.com/downloads/).
