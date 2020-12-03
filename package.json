@@ -1,0 +1,20 @@
+{
+  "name": "sroc-cha-acceptance-tests",
+  "version": "1.0.0",
+  "description": "Automated acceptance tests for the Charging Module API",
+  "homepage": "https://github.com/DEFRA/sroc-cha-acceptance-tests",
+  "author": "Defra",
+  "license": "OGL-UK-3.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DEFRA/sroc-cha-acceptance-tests"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node index.js"
+  },
+  "dependencies": {
+    "newman": "^5.2.1"
+  }
+}

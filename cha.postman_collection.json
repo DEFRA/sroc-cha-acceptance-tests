@@ -1,0 +1,378 @@
+{
+	"info": {
+		"_postman_id": "2171aefe-460d-4003-8633-e710de635387",
+		"name": "CHA acceptance tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "List Regimes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b7a8386a-292f-40e6-b126-c811b9085985",
+								"exec": [
+									"pm.test('Returns correct code', () => {",
+									"    pm.expect(pm.response.code).to.equal(200)",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/regimes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"regimes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show regimes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "05c3861b-fa91-45ba-8efb-282076b68438",
+								"exec": [
+									"pm.test('Returns correct code', () => {",
+									"    pm.expect(pm.response.code).to.equal(200)",
+									"})",
+									"pm.test('Returns the expected regime', () => {",
+									"    const body = pm.response.json()",
+									"",
+									"    pm.expect(body.regime.slug).to.equal(pm.variables.get('slug'))",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/regimes/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"regimes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{slug}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{adminToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d8cca2f6-3d01-4be3-a8a1-47cbf1cdee63",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "2efabc28-72a5-4a52-ba84-5db6d17d6e3f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fafbf491-dca9-437e-947d-f72bf3be90dd",
+						"exec": [
+							"pm.test(\"Returns correct code\", () => {",
+							"    pm.expect(pm.response.code).to.equal(200)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/status",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Root",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3b67eead-8c7d-4b0a-acd4-ca381430ac86",
+						"exec": [
+							"pm.test('Returns correct code', () => {",
+							"    pm.expect(pm.response.code).to.equal(200)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}",
+					"host": [
+						"{{baseUrl}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{systemToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "780d1f37-4099-4ce3-87bf-34127fd610ab",
+				"type": "text/javascript",
+				"exec": [
+					"// Use to automate refreshing the AWS cognito bearer token in Postman",
+					"//",
+					"// Thanks to the following sources for helping to put this",
+					"// together",
+					"// https://nicolaswidart.com/blog/automatically-set-authentication-tokens-in-postman-requests",
+					"// https://medium.com/@allen.helton/how-to-automate-oauth2-token-renewal-in-postman-864420d381a0",
+					"// https://stackoverflow.com/a/55614206/6117745",
+					"// https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html",
+					"",
+					"const sdk = require('postman-collection')",
+					"",
+					"// We need to support requests against endpoints that require different",
+					"// credentials. We keep the code generic by referencing the environment",
+					"// variables that hold those credentials using these variables. We default",
+					"// to the 'system' versions as they will be used in the majority of cases.",
+					"let tokenVar = 'systemToken'",
+					"let tokenTimestampVar = 'systemTokenTimestamp'",
+					"let tokenExpiresInVar = 'systemExpiresIn'",
+					"let oauthUserVar = 'systemUser'",
+					"let oauthPassVar = 'systemPass'",
+					"",
+					"const authServiceUrl = pm.environment.get('tokenUrl')",
+					"",
+					"if (automateToken()) {",
+					"  console.log('CHA API - Automating token')",
+					"  // Check if the request is to an admin endpoint. It includes so update the variables",
+					"",
+					"  if (requestRequiresAdmin()) {",
+					"    updateEnvironmentReferencesToAdmin()",
+					"    console.log('CHA API - Admin path determined. Using admin env vars.')",
+					"  }",
+					"",
+					"  if (tokenRefreshNeeded()) {",
+					"    console.log('CHA API - Refresh of token needed')",
+					"    refreshToken()",
+					"  }",
+					"}",
+					"",
+					"function automateToken () {",
+					"  let automate = pm.environment.get('automateToken') || 'true'",
+					"",
+					"  if (automate === 'true') {",
+					"    automate = true",
+					"  } else {",
+					"    automate = false",
+					"  }",
+					"",
+					"  return automate",
+					"}",
+					"",
+					"function requestRequiresAdmin () {",
+					"  const path = pm.request.url.getPath()",
+					"  const regex = RegExp('(authorised_systems|regime)', 'i')",
+					"",
+					"  return regex.test(path)",
+					"}",
+					"",
+					"// Update the values we use to reference to environment variables",
+					"// to use the admin alternatives",
+					"function updateEnvironmentReferencesToAdmin () {",
+					"  tokenVar = 'adminToken'",
+					"  tokenTimestampVar = 'adminTokenTimestamp'",
+					"  tokenExpiresInVar = 'adminExpiresIn'",
+					"  oauthUserVar = 'adminUser'",
+					"  oauthPassVar = 'adminPass'",
+					"}",
+					"",
+					"// Compares the current token's timestamp against the current time",
+					"// in UTC. If the difference in milliseconds is greater than",
+					"// tokenExpiresInAsMilliseconds() then a refresh is needed",
+					"function tokenRefreshNeeded () {",
+					"  // Date.now() returns the number of milliseconds since 1970-01-01",
+					"  const difference = (Date.now() - timestampAsMilliseconds())",
+					"",
+					"  return difference >= tokenExpiresInAsMilliseconds()",
+					"}",
+					"",
+					"// When we successfully request a token we record a timestamp",
+					"// in the environment variables.",
+					"function timestampAsMilliseconds () {",
+					"  // Set a default in case we don't have a timestamp in the env vars",
+					"  let result = Date.UTC(2010, 0, 1)",
+					"  const tokenTimestamp = pm.environment.get(tokenTimestampVar)",
+					"",
+					"  if (tokenTimestamp) {",
+					"    result = tokenTimestamp",
+					"  }",
+					"",
+					"  return result",
+					"}",
+					"",
+					"// When we successfully request a token we record how long the token",
+					"// will be valid for (expressed as seconds) in the environment variables.",
+					"// As we need to deal in milliseconds this function takes that value (or",
+					"// a default if the env var doesn't exist) and converts it to millseconds.",
+					"function tokenExpiresInAsMilliseconds () {",
+					"  // Set a default in case we don't have a timestamp in the env vars",
+					"  let result = 3600",
+					"  const tokenExpiresIn = pm.environment.get(tokenExpiresInVar)",
+					"",
+					"  if (tokenExpiresIn) {",
+					"    result = tokenExpiresIn",
+					"  }",
+					"",
+					"  return result * 1000",
+					"}",
+					"",
+					"function encodedKeys () {",
+					"  const keys = pm.environment.get(oauthUserVar) + ':' + pm.environment.get(oauthPassVar)",
+					"",
+					"  return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(keys));",
+					"}",
+					"",
+					"function refreshToken () {",
+					"  const tokenRequest = new sdk.Request({",
+					"    url: authServiceUrl,",
+					"    method: 'POST',",
+					"    header: [",
+					"      new sdk.Header({",
+					"        key: 'content-type',",
+					"        value: 'application/x-www-form-urlencoded'",
+					"      }),",
+					"      new sdk.Header({",
+					"        key: 'acccept',",
+					"        value: 'application/json'",
+					"      }),",
+					"      new sdk.Header({",
+					"        key: 'Authorization',",
+					"        value: 'Basic ' + encodedKeys()",
+					"      })",
+					"    ],",
+					"    body: {",
+					"      mode: 'urlencoded',",
+					"      urlencoded: [",
+					"        { key: 'grant_type', value: 'client_credentials' },",
+					"      ]",
+					"    }",
+					"  })",
+					"",
+					"  pm.sendRequest(tokenRequest, function (err, response) {",
+					"    if (err) {",
+					"      throw err",
+					"    }",
+					"",
+					"    if (response.code !== 200) {",
+					"      throw new Error('Could not log in.')",
+					"    }",
+					"",
+					"    pm.environment.set(tokenVar, response.json().access_token)",
+					"    pm.environment.set(tokenExpiresInVar, response.json().expires_in)",
+					"    pm.environment.set(tokenTimestampVar, Date.now());",
+					"    console.log(`New token has been set: ${response.json().access_token}`);",
+					"  })",
+					"}",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "5cd7a31e-b6df-4f45-b9d8-45d00e42a308",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "8d1e9436-519e-4a9d-8029-d26c562651f2",
+			"key": "slug",
+			"value": "wrls"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
