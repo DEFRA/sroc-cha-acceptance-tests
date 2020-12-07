@@ -74,6 +74,14 @@ npm start -- -e dev -r cli json
 
 If you don't set a reporter the tests will use `cli` as the default.
 
+#### Html
+
+We have also included support for the [newman-reporter-htmlextra](https://github.com/DannyDainton/newman-reporter-htmlextra) as well. **Newman** no longer has a built-in one and of the options this is our preferred. To use it just add `html` to your list of reporters
+
+```bash
+npm start -- -e dev -r cli html
+```
+
 ### CI
 
 To check we haven't broken anything we have a [separate Postman collection](/ci.postman_collection.json) we use just when running our CI checks. If you call `npm start example` it will run the CI request and test rather than the main charging module ones.
