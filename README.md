@@ -56,6 +56,24 @@ npm start -- -e dev
 
 The app will automatically look for a `*.postman_environment.json` with the matching prefix.
 
+### Reporters
+
+**Newman** comes with some [built-in reporters](https://github.com/postmanlabs/newman#reporters) the default being the [CLI reporter](https://github.com/postmanlabs/newman#cli-reporter).
+
+When you run the tests you can specify which of these reporters to use
+
+```bash
+npm start -- -e dev -r json
+```
+
+You can even specify multiple reporters
+
+```bash
+npm start -- -e dev -r cli json
+```
+
+If you don't set a reporter the tests will use `cli` as the default.
+
 ### CI
 
 To check we haven't broken anything we have a [separate Postman collection](/ci.postman_collection.json) we use just when running our CI checks. If you call `npm start example` it will run the CI request and test rather than the main charging module ones.
