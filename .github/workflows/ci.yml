@@ -50,6 +50,6 @@ jobs:
           npm run lint
 
       # Run our CI postman test to confirm we haven't made changes to the project that prevent newman from running
-      - name: Run unit tests
+      - name: Run build test
         run: |
-          npm start example
+          npm start -- -e example

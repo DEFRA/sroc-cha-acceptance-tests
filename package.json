@@ -10,12 +10,16 @@
     "type": "git",
     "url": "https://github.com/DEFRA/sroc-cha-acceptance-tests"
   },
+  "bin": {
+    "cha-tests": "./index.js"
+  },
   "scripts": {
     "start": "node index.js",
     "test": "node index.js",
     "lint": "standard"
   },
   "dependencies": {
+    "commander": "^6.2.0",
     "newman": "^5.2.1"
   },
   "devDependencies": {

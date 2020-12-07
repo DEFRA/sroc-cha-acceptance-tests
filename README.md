@@ -51,7 +51,7 @@ Git is setup to ignore everything bar the example environment file. Even so, dou
 Running the tests involves firing all the requests in the [cha.postman_collection.json](cha.postman_collection.json) combined with the values taken from the selected environment file. For example, if you wanted to test the **development** environment and had created the environment file `dev.postman_environment.json` you would call
 
 ```bash
-npm start dev
+npm start -- -e dev
 ```
 
 The app will automatically look for a `*.postman_environment.json` with the matching prefix.
