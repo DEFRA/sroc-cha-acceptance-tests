@@ -18,10 +18,10 @@ program.on('--help', () => {
 
 program.parse()
 
-const args = ParamHelper.params(program)
+const params = ParamHelper.params(program)
 
 newman.run(
-  args,
+  params,
   function (err) {
     if (err) { throw err }
     console.log('Collection run complete!')
