@@ -24,6 +24,11 @@ node_modules/
 environments/*
 !environments/example.postman_environment.json
 
+# Newman output folder
+# If we ask newman to use a reporter other than CLI it will output the result to
+# here. We don't want this output commited as part of source control.
+newman/
+
 # Dotenv https://github.com/motdotla/dotenv
 # Ignore the .env file as this may contain actual credentials. The .env.example
 # file gets committed which acts as documentation on what environment
