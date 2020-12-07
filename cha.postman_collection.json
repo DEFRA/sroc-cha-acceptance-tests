@@ -151,34 +151,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Root",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "3b67eead-8c7d-4b0a-acd4-ca381430ac86",
-						"exec": [
-							"pm.test('Returns correct code', () => {",
-							"    pm.expect(pm.response.code).to.equal(200)",
-							"})"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUrl}}",
-					"host": [
-						"{{baseUrl}}"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"auth": {
