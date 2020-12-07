@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "commander": "^6.2.0",
-    "newman": "^5.2.1"
+    "newman": "^5.2.1",
+    "newman-reporter-html": "^1.0.5"
   },
   "devDependencies": {
     "standard": "^16.0.3"
