@@ -56,6 +56,28 @@ npm start -- -e dev
 
 The app will automatically look for a `*.postman_environment.json` with the matching prefix.
 
+### Folders
+
+The primary means of grouping requests into a 'test' in Postman is using folders in your collection. We can tell **Newman** to only run the requests in a folder through the command line.
+
+```bash
+npm start -- -e dev -f bill-run-test
+```
+
+You can even specify multiple folders
+
+```bash
+npm start -- -e dev -f bill-run-test endpoints-check
+```
+
+If you have setup your collection so each folder represents a 'test', using the `-f` folders option allows you to select which 'tests' to run.
+
+#### Naming folders
+
+In the Postman app it makes perfect sense to name folders with spaces and capitals, for example, **Bill run test**. It looks more readable in the UI! But as the intention is to make them available on the command line to **Newman**, spaces and mixed cases in names can prove problematic.
+
+If you can, stick to all lowercase and go with either [snake_case](https://en.wikipedia.org/wiki/Snake_case) or [kebab-case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles) rather than using spaces.
+
 ### Reporters
 
 **Newman** comes with some [built-in reporters](https://github.com/postmanlabs/newman#reporters) the default being the [CLI reporter](https://github.com/postmanlabs/newman#cli-reporter).
