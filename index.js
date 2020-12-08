@@ -8,12 +8,14 @@ program
   .name('cha-tests')
   .requiredOption('-e, --environment <environment>', 'environment to run tests against')
   .option('-r, --reporters [reporters...]', 'reporters you wish newman to use', 'cli')
+  .option('-f, --folders [folders...]', 'names of folders in the collection you wish newman to run')
 
 program.on('--help', () => {
   console.log('')
   console.log('Examples:')
   console.log('  $ npm start -- -e dev')
   console.log('  $ npm start -- -e dev -r cli,json')
+  console.log('  $ npm start -- -e dev -r cli -f admin')
 })
 
 program.parse()
