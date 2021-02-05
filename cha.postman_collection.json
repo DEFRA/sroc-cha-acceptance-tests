@@ -2540,21 +2540,21 @@
 					"response": []
 				},
 				{
-					"name": "32. \"newLicense\" must be a Boolean",
+					"name": "32. \"subjectToMinimumCharge\" must be a Boolean",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
 									"const response = pm.response.json();",
-									"console.log(\"Verifying New License is a boolean\");",
+									"console.log(\"Verifying Subject To Minimum Charge is a boolean\");",
 									"",
 									"pm.test(\"Status code is 422 Unprocessable\", function () {",
 									"    pm.response.to.have.status(422);",
 									"});",
 									"",
 									"pm.test(\"Verify error message states newLicence must be a boolean\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"newLicence\\\" must be a boolean\");",
+									"    pm.expect(response.message).to.include(\"\\\"subjectToMinimumCharge\\\" must be a boolean\");",
 									"});",
 									"",
 									""
@@ -2575,7 +2575,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"110\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"T1234567890A\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"ExtraRgnY_record1\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"region\": \"T\",\r\n    \"areaCode\": \"ARCA\",\r\n    \"newLicence\": \"Test\"\r\n}"
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"110\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"T1234567890A\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"ExtraRgnY_record1\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"region\": \"T\",\r\n    \"areaCode\": \"ARCA\",\r\n    \"subjectToMinimumCharge\": \"Test\"\r\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
