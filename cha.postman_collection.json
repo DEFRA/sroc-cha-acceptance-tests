@@ -2170,7 +2170,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify input region is required\", function () {",
-									"    pm.expect(response.message).to.include(\"Bill run \" + environment.billRun_id + \" is for region T but transaction is for region undefined.\");",
+									"    pm.expect(response.message).to.include(\"\\\"region\\\" is required\");",
 									"});",
 									""
 								],
