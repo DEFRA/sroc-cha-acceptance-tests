@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e3959834-f4b9-4742-987b-e7143d25b794",
+		"_postman_id": "1f4b2569-4305-4dc1-9655-f317133e129b",
 		"name": "CHA acceptance tests v2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -77,7 +77,8 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "{{slug}}"
+									"value": "{{slug}}",
+									"type": "string"
 								}
 							]
 						}
@@ -3030,7 +3031,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be a number of milliseconds or valid date string. \\\"periodEnd\\\" references \\\"ref:periodStart\\\" which is not a date\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -3083,7 +3084,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be a number of milliseconds or valid date string. \\\"periodEnd\\\" references \\\"ref:periodStart\\\" which is not a date\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -3136,7 +3137,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be a valid date\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -3189,7 +3190,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be greater than or equal to \\\"2014-04-01T00:00:00.000Z\\\"\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -3348,7 +3349,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be a valid date. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -3401,7 +3402,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be a valid date. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -3454,7 +3455,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be a valid date. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -5777,7 +5778,10 @@
 									"pm.test(\"Status code is 422 Unprocessable\", function () {",
 									"    pm.response.to.have.status(422);",
 									"});",
-									""
+									"",
+									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format\");",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -5827,7 +5831,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be a valid date\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -5878,7 +5882,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be a valid date\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -6027,7 +6031,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be a valid date. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -6078,7 +6082,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be a valid date. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -6115,7 +6119,7 @@
 					"response": []
 				},
 				{
-					"name": "29. \"periodEndDate\" YYYY must be valid year",
+					"name": "30. \"periodEndDate\" YYYY must be valid year",
 					"event": [
 						{
 							"listen": "test",
@@ -6129,7 +6133,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be a valid date. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be in [DD-MMM-YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD] format. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -6166,58 +6170,7 @@
 					"response": []
 				},
 				{
-					"name": "29. \"periodEndDate\" YYYY must be valid year Copy",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();",
-									"console.log(\"Validating periodEndDate must be valid month\");",
-									"",
-									"pm.test(\"Status code is 422 Unprocessable\", function () {",
-									"    pm.response.to.have.status(422);",
-									"});",
-									"",
-									"pm.test(\"Verify error message for indication of invalid values for periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodEnd\\\" must be a valid date. \\\"periodStart\\\" date references \\\"ref:periodEnd\\\" which must have a valid date format\");",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-20--\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 214,\r\n\t\"authorisedDays\": 214,\r\n    \"volume\": \"3.5865\",\r\n    \"source\": \"Supported\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Anglian\",\r\n\t\"section127Agreement\": false,\r\n\t\"section130Agreement\": false\r\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/v2/wrls/calculate-charge",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v2",
-								"wrls",
-								"calculate-charge"
-							]
-						},
-						"description": "add transaction to queue"
-					},
-					"response": []
-				},
-				{
-					"name": "30. \"periodStartDate\" & \"periodEndDate\" must fall in the same FY",
+					"name": "31. \"periodStartDate\" & \"periodEndDate\" must fall in the same FY",
 					"event": [
 						{
 							"listen": "test",
@@ -6270,7 +6223,7 @@
 					"response": []
 				},
 				{
-					"name": "31. \"periodStartDate\" must be less than \"periodEndDate\"",
+					"name": "32. \"periodStartDate\" must be less than \"periodEndDate\"",
 					"event": [
 						{
 							"listen": "test",
@@ -6323,7 +6276,7 @@
 					"response": []
 				},
 				{
-					"name": "32. \"billabledays\" does not accept INT value more than 366",
+					"name": "33. \"billabledays\" does not accept INT value more than 366",
 					"event": [
 						{
 							"listen": "test",
@@ -6376,7 +6329,7 @@
 					"response": []
 				},
 				{
-					"name": "33. \"billabledays\" does not accept INT value less than 0",
+					"name": "34. \"billabledays\" does not accept INT value less than 0",
 					"event": [
 						{
 							"listen": "test",
@@ -6427,7 +6380,7 @@
 					"response": []
 				},
 				{
-					"name": "34. \"authorisedDays\" does not accept INT value more than 366",
+					"name": "35. \"authorisedDays\" does not accept INT value more than 366",
 					"event": [
 						{
 							"listen": "test",
@@ -6480,7 +6433,7 @@
 					"response": []
 				},
 				{
-					"name": "35. \"authorisedDays\" does not accept INT value less than 0",
+					"name": "36. \"authorisedDays\" does not accept INT value less than 0",
 					"event": [
 						{
 							"listen": "test",
@@ -6531,7 +6484,7 @@
 					"response": []
 				},
 				{
-					"name": "36. \"credit\" only accepts a boolean",
+					"name": "37. \"credit\" only accepts a boolean",
 					"event": [
 						{
 							"listen": "test",
@@ -6582,7 +6535,7 @@
 					"response": []
 				},
 				{
-					"name": "37. \"twoPartTariff\" only accepts a boolean Copy",
+					"name": "38. \"twoPartTariff\" only accepts a boolean Copy",
 					"event": [
 						{
 							"listen": "test",
@@ -6633,7 +6586,7 @@
 					"response": []
 				},
 				{
-					"name": "38. \"compensationCharge\" only accepts a boolean",
+					"name": "39. \"compensationCharge\" only accepts a boolean",
 					"event": [
 						{
 							"listen": "test",
@@ -6684,7 +6637,7 @@
 					"response": []
 				},
 				{
-					"name": "39. \"waterUndertaker\" only accepts a boolean",
+					"name": "40. \"waterUndertaker\" only accepts a boolean",
 					"event": [
 						{
 							"listen": "test",
@@ -6735,7 +6688,7 @@
 					"response": []
 				},
 				{
-					"name": "40. \"section127Agreement\" only accepts a boolean",
+					"name": "41. \"section127Agreement\" only accepts a boolean",
 					"event": [
 						{
 							"listen": "test",
@@ -6786,7 +6739,7 @@
 					"response": []
 				},
 				{
-					"name": "41. \"section130Agreement\" only accepts a boolean",
+					"name": "42. \"section130Agreement\" only accepts a boolean",
 					"event": [
 						{
 							"listen": "test",
@@ -6837,7 +6790,7 @@
 					"response": []
 				},
 				{
-					"name": "42. \"volume\" only accepts number",
+					"name": "43. \"volume\" only accepts number",
 					"event": [
 						{
 							"listen": "test",
@@ -6889,7 +6842,7 @@
 					"response": []
 				},
 				{
-					"name": "43. \"volume\" does not accept boolean",
+					"name": "44. \"volume\" does not accept boolean",
 					"event": [
 						{
 							"listen": "test",
@@ -6903,7 +6856,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of volume data input must be a number\", function () {",
-									"    pm.expect(response.message).to.include(\\\"volume\\\" must be a number\");",
+									"    pm.expect(response.message).to.include(\"\\\"volume\\\" must be a number\");",
 									"});",
 									"",
 									""
@@ -6942,7 +6895,7 @@
 					"response": []
 				},
 				{
-					"name": "44. \"section126Factor\" only accepts number",
+					"name": "45. \"section126Factor\" only accepts number",
 					"event": [
 						{
 							"listen": "test",
@@ -6993,7 +6946,7 @@
 					"response": []
 				},
 				{
-					"name": "45. \"section126Factor\" does not accept boolean",
+					"name": "46. \"section126Factor\" does not accept boolean",
 					"event": [
 						{
 							"listen": "test",
@@ -7044,7 +6997,7 @@
 					"response": []
 				},
 				{
-					"name": "46. \"section126Factor\" does not accept numbers with more than 3 decimal places",
+					"name": "47. \"section126Factor\" does not accept numbers with more than 3 decimal places",
 					"event": [
 						{
 							"listen": "test",
@@ -7095,7 +7048,7 @@
 					"response": []
 				},
 				{
-					"name": "47. BigINT Test",
+					"name": "48. BigINT Test",
 					"event": [
 						{
 							"listen": "test",
