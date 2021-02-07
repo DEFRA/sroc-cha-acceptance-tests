@@ -63,7 +63,7 @@
 									"pm.test('Returns the expected regime', () => {",
 									"    const body = pm.response.json()",
 									"",
-									"    pm.expect(body.regime.slug).to.equal(pm.variables.get('slug'))",
+									"    pm.expect(body.slug).to.equal('wrls')",
 									"})",
 									""
 								],
