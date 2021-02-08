@@ -4402,7 +4402,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of section126Factor data input must be a number with up to 3 decimal places\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"section126Factor\\\" must be a number with no more than 3 decimal places\");",
+									"    pm.expect(response.message).to.include(\"\\\"section126Factor\\\" must have no more than 3 decimal places\");",
 									"});",
 									"",
 									""
@@ -7025,7 +7025,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of section126Factor data input must be a number with up to 3 decimal places\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"section126Factor\\\" must be a number with no more than 3 decimal places\");",
+									"    pm.expect(response.message).to.include(\"\\\"section126Factor\\\" must have no more than 3 decimal places\");",
 									"});"
 								],
 								"type": "text/javascript"
