@@ -87,7 +87,8 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "{{regimeId}}"
+									"value": "{{regimeId}}",
+									"type": "string"
 								}
 							]
 						}
@@ -3629,7 +3630,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of periodEndDate must be later than periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be less than \\\"ref:periodEnd\\\"\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be less than or equal to \\\"ref:periodEnd\\\"\");",
 									"});",
 									"",
 									""
@@ -6303,7 +6304,7 @@
 									"});",
 									"",
 									"pm.test(\"Verify error message for indication of periodEndDate must be later than periodStartDate\", function () {",
-									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be less than \\\"ref:periodEnd\\\"\");",
+									"    pm.expect(response.message).to.include(\"\\\"periodStart\\\" must be less than or equal to \\\"ref:periodEnd\\\"\");",
 									"});",
 									"",
 									""
@@ -7158,6 +7159,917 @@
 								"v2",
 								"wrls",
 								"calculate-charge"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "view-status-generate-summary",
+			"item": [
+				{
+					"name": "1. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomCustomerRef = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"const randomCustomerRef1 = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"const randomCustomerRef2 = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"\r",
+									"const randomLicenseNum = Math.floor((Math.random() * 100000) + 1);\r",
+									"const randomLicenseNum1 = Math.floor((Math.random() * 100000) + 1);\r",
+									"const randomLicenseNum2 = Math.floor((Math.random() * 100000) + 1);\r",
+									"\r",
+									"const customerRef = \"S\" + randomCustomerRef + \"A\";\r",
+									"const customerRef1 = \"S\" + randomCustomerRef1 + \"B\";\r",
+									"const customerRef2 = \"S\" + randomCustomerRef2 + \"C\";\r",
+									"\r",
+									"const licenceNum = \"S\" + randomLicenseNum + \"_GEN\";\r",
+									"const licenceNum1 = \"S\" + randomLicenseNum1 + \"_GEN1\";\r",
+									"const licenceNum2 = \"S\" + randomLicenseNum2 + \"_GEN2\";\r",
+									"\r",
+									"pm.environment.set(\"customer_ref\", customerRef);\r",
+									"pm.environment.set(\"customer_ref1\", customerRef1);\r",
+									"pm.environment.set(\"customer_ref2\", customerRef2);\r",
+									"\r",
+									"pm.environment.set(\"licence_num\", licenceNum);\r",
+									"pm.environment.set(\"licence_num1\", licenceNum1);\r",
+									"pm.environment.set(\"licence_num2\", licenceNum2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create a valid Pre-SRoC Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									"console.log(\"Transaction ID generated: \" + environment.transaction_id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"1.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "3. \"regime\" parameter is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify 404 error due to missing regime\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2//bill-runs/{{billRun_id}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"",
+								"bill-runs",
+								"{{billRun_id}}",
+								"status"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "4. \"billRunId\" parameter is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify 404 error due to missing bill run ID\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs//status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"",
+								"status"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Valid \"billRunId\" is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify 404 error due to invalid bill run ID\");\r",
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run ID is not found in CM database\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Bill run \" + environment.randomBillRunID + \" is unknown.\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var uuid = require('uuid');\r",
+									"var myUUID = uuid.v4();\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"randomBillRunID\", myUUID);\r",
+									"\r",
+									"console.log(myUUID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{randomBillRunID}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{randomBillRunID}}",
+								"status"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "6. Current status of the bill run is returned",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify current status of the Bill Run is returned upon receipt of valid request\");\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify current status of Bill Run\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"initialised\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"status"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "7. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "8. Current status of the bill run is returned",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify current status of the Bill Run is returned upon receipt of valid request\");\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify current status of Bill Run\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"generated\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"status"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "9. Generated Bill Run cannot be regenerated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify bill Run that has already been generated throws error\");\r",
+									"\r",
+									"pm.test(\"409 error\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify error message that Bill Run has already been generated\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Summary for bill run \" + environment.billRun_id + \" has already been generated.\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "10. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11. Bill Run without transactions cannot be generated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify the CM returns error when a Bill Run without transactions is generated\");\r",
+									"\r",
+									"pm.test(\"Status code is 422\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Summary for a Bill Run without transactions cannot be generated\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Summary for bill run \" + environment.billRun_id + \" cannot be generated because it has no transactions.\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "12. Create a valid Pre-SRoC Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									"console.log(\"Transaction ID generated: \" + environment.transaction_id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"1.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "13. \"billRunId\" parameter is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify Bill Run is not found - 404 error\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs//generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "14. \"regime\" parameter is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify regime is not found - 404 error\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2//bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "15. Valid \"billRunId\" parameter is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify valid billRunId parameter is mandatory\");\r",
+									"\r",
+									"pm.test(\"Verify Bill Run is not found - 404 error\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify valid billRunId parameter is mandatory\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Bill run \" + environment.randomBillRunID + \" is unknown.\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{randomBillRunID}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{randomBillRunID}}",
+								"generate"
 							]
 						},
 						"description": "add transaction to queue"
