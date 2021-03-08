@@ -13065,7 +13065,53 @@
 					"response": []
 				},
 				{
-					"name": "44. Bill Run Summary excludes Deminimis Invoice",
+					"name": "44. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "45. Bill Run Summary excludes Deminimis Invoice",
 					"event": [
 						{
 							"listen": "test",
@@ -13159,7 +13205,7 @@
 					"response": []
 				},
 				{
-					"name": "45. Invoice Level Summary shows an Invoice with a net value of below 500 and made up of multiple transactions across different Licenses is flagged as Deminimis",
+					"name": "46. Invoice Level Summary shows an Invoice with a net value of below 500 and made up of multiple transactions across different Licenses is flagged as Deminimis",
 					"event": [
 						{
 							"listen": "test",
@@ -13246,7 +13292,7 @@
 					"response": []
 				},
 				{
-					"name": "46. Create a new Bill Run",
+					"name": "47. Create a new Bill Run",
 					"event": [
 						{
 							"listen": "test",
@@ -13314,7 +13360,7 @@
 					"response": []
 				},
 				{
-					"name": "47. Create a Zero value Transaction",
+					"name": "48. Create a Zero value Transaction",
 					"event": [
 						{
 							"listen": "test",
@@ -13371,7 +13417,7 @@
 					"response": []
 				},
 				{
-					"name": "48. Create Transaction which brings the Invoice to Positive and below 500",
+					"name": "49. Create Transaction which brings the Invoice to Positive and below 500",
 					"event": [
 						{
 							"listen": "test",
@@ -13428,7 +13474,53 @@
 					"response": []
 				},
 				{
-					"name": "49. Bill Run Summary excludes Deminimis Invoice",
+					"name": "50. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "51. Bill Run Summary excludes Deminimis Invoice",
 					"event": [
 						{
 							"listen": "test",
@@ -13524,7 +13616,7 @@
 					"response": []
 				},
 				{
-					"name": "50. Invoice Level Summary shows an Invoice with a net value of below 500 and made up of multiple transactions across different Licenses is flagged as Deminimis",
+					"name": "52. Invoice Level Summary shows an Invoice with a net value of below 500 and made up of multiple transactions across different Licenses is flagged as Deminimis",
 					"event": [
 						{
 							"listen": "test",
@@ -13545,7 +13637,7 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
-									"    pm.expect(invoiceArray.creditLineValue).to.not.eql(0);\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Verify Invoice level Summary debitLineCount is not 0\", function () {\r",
