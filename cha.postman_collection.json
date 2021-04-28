@@ -31049,6 +31049,415 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "change-customer-details",
+			"item": [
+				{
+					"name": "1. \"region\" is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message states region is required\", function () {\r",
+									"    pm.expect(response.message).to.include(\"\\\"region\\\" is required\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"regime\": \"wrls\",\r\n  \"customerReference\": \"{{customer_ref}}\",\r\n  \"customerName\": \"Huge Factory Ltd\",\r\n  \"addressLine1\": \"1 Monster Lane\",\r\n  \"addressLine2\": \"High Town\",\r\n  \"addressLine4\": \"Chigley\",\r\n  \"addressLine5\": \"something\",\r\n  \"addressLine6\": \"something\",\r\n  \"postCode\": \"bs45df\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/customer-changes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"customer-changes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Valid \"region\" is required",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message states a valid region is required\", function () {\r",
+									"    pm.expect(response.message).to.include(\"\\\"region\\\" must be one of [A, B, E, N, S, T, W, Y]\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"regime\": \"wrls\",\r\n  \"region\": \"WERS\",\r\n  \"customerReference\": \"{{customer_ref}}\",\r\n  \"customerName\": \"Huge Factory Ltd\",\r\n  \"addressLine1\": \"1 Monster Lane\",\r\n  \"addressLine2\": \"High Town\",\r\n  \"addressLine4\": \"Chigley\",\r\n  \"addressLine5\": \"something\",\r\n  \"addressLine6\": \"something\",\r\n  \"postCode\": \"bs45df\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/customer-changes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"customer-changes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. \"customerRef\" is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message states customerReference is required\", function () {\r",
+									"    pm.expect(response.message).to.include(\"\\\"customerReference\\\" is required\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"regime\": \"wrls\",\r\n  \"region\": \"S\",\r\n  \"customerName\": \"Huge Factory Ltd\",\r\n  \"addressLine1\": \"1 Monster Lane\",\r\n  \"addressLine2\": \"High Town\",\r\n  \"addressLine4\": \"Chigley\",\r\n  \"addressLine5\": \"something\",\r\n  \"addressLine6\": \"something\",\r\n  \"postCode\": \"bs45df\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/customer-changes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"customer-changes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. \"customerName\" is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message states customerName is required\", function () {\r",
+									"    pm.expect(response.message).to.include(\"\\\"customerName\\\" is required\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"regime\": \"wrls\",\r\n  \"region\": \"S\",\r\n  \"customerReference\": \"{{customer_ref}}\",\r\n  \"addressLine1\": \"1 Monster Lane\",\r\n  \"addressLine2\": \"High Town\",\r\n  \"addressLine4\": \"Chigley\",\r\n  \"addressLine5\": \"something\",\r\n  \"addressLine6\": \"something\",\r\n  \"postCode\": \"bs45df\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/customer-changes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"customer-changes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. \"addressLine1\" is mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 422 Unprocessable Entity\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message states addressLine1 is required\", function () {\r",
+									"    pm.expect(response.message).to.include(\"\\\"addressLine1\\\" is required\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"regime\": \"wrls\",\r\n  \"region\": \"S\",\r\n  \"customerReference\": \"{{customer_ref}}\",\r\n  \"customerName\": \"Huge Factory Ltd\",\r\n  \"addressLine2\": \"High Town\",\r\n  \"addressLine4\": \"Chigley\",\r\n  \"addressLine5\": \"something\",\r\n  \"addressLine6\": \"something\",\r\n  \"postCode\": \"bs45df\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/customer-changes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"customer-changes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Customer Details are added to the queue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomCustomerRef = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"\r",
+									"const customerRef = \"A\" + randomCustomerRef + \"A\";\r",
+									"\r",
+									"pm.environment.set(\"customer_ref\", customerRef);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"region\": \"A\",\r\n  \"customerReference\": \"{{customer_ref}}\",\r\n  \"customerName\": \"Huge Factory Ltd\",\r\n  \"addressLine1\": \"2 Monster Lane\",\r\n  \"addressLine2\": \"High Town\",\r\n  \"addressLine4\": \"Chigley\",\r\n  \"addressLine5\": \"something\",\r\n  \"addressLine6\": \"something\",\r\n  \"postCode\": \"bs45df\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/customer-changes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"customer-changes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7. Previous Customer Details can be updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"region\": \"A\",\r\n  \"customerReference\": \"{{customer_ref}}\",\r\n  \"customerName\": \"Fox McCloud\",\r\n  \"addressLine1\": \"1 Slippy's Hit Lane\",\r\n  \"addressLine2\": \"Corneria City\",\r\n  \"addressLine4\": \"Lylat\",\r\n  \"addressLine5\": \"\",\r\n  \"addressLine6\": \"\",\r\n  \"postcode\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/customer-changes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"customer-changes"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"auth": {
