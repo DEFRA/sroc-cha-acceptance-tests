@@ -17852,6 +17852,5455 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "minimum-charge",
+			"item": [
+				{
+					"name": "1. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomCustomerRef = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"const randomCustomerRef1 = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"const randomCustomerRef2 = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"const randomCustomerRef3 = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"const randomCustomerRef4 = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"const randomCustomerRef5 = Math.floor((Math.random() * 1000000000) + 1);\r",
+									"\r",
+									"const randomLicenseNum = Math.floor((Math.random() * 100000) + 1);\r",
+									"const randomLicenseNum1 = Math.floor((Math.random() * 100000) + 1);\r",
+									"const randomLicenseNum2 = Math.floor((Math.random() * 100000) + 1);\r",
+									"const randomLicenseNum3 = Math.floor((Math.random() * 100000) + 1);\r",
+									"const randomLicenseNum4 = Math.floor((Math.random() * 100000) + 1);\r",
+									"const randomLicenseNum5 = Math.floor((Math.random() * 100000) + 1);\r",
+									"\r",
+									"const customerRef = \"A\" + randomCustomerRef + \"A\";\r",
+									"const customerRef1 = \"A\" + randomCustomerRef1 + \"B\";\r",
+									"const customerRef2 = \"A\" + randomCustomerRef2 + \"C\";\r",
+									"const customerRef3 = \"A\" + randomCustomerRef3 + \"D\";\r",
+									"const customerRef4 = \"A\" + randomCustomerRef4 + \"E\";\r",
+									"const customerRef5 = \"A\" + randomCustomerRef5 + \"F\";\r",
+									"\r",
+									"const licenceNum = \"A\" + randomLicenseNum + \"_GEN\";\r",
+									"const licenceNum1 = \"A\" + randomLicenseNum1 + \"_GEN1\";\r",
+									"const licenceNum2 = \"A\" + randomLicenseNum2 + \"_GEN2\";\r",
+									"const licenceNum3 = \"A\" + randomLicenseNum3 + \"_GEN3\";\r",
+									"const licenceNum4 = \"A\" + randomLicenseNum4 + \"_GEN4\";\r",
+									"const licenceNum5 = \"A\" + randomLicenseNum5 + \"_GEN5\";\r",
+									"\r",
+									"pm.environment.set(\"customer_ref\", customerRef);\r",
+									"pm.environment.set(\"customer_ref1\", customerRef1);\r",
+									"pm.environment.set(\"customer_ref2\", customerRef2);\r",
+									"pm.environment.set(\"customer_ref3\", customerRef3);\r",
+									"pm.environment.set(\"customer_ref4\", customerRef4);\r",
+									"pm.environment.set(\"customer_ref5\", customerRef5);\r",
+									"\r",
+									"pm.environment.set(\"licence_num\", licenceNum);\r",
+									"pm.environment.set(\"licence_num1\", licenceNum1);\r",
+									"pm.environment.set(\"licence_num2\", licenceNum2);\r",
+									"pm.environment.set(\"licence_num3\", licenceNum3);\r",
+									"pm.environment.set(\"licence_num4\", licenceNum4);\r",
+									"pm.environment.set(\"licence_num5\", licenceNum5);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create a Transaction with a value below £25 and Minimum Charge set to FALSE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"325\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": false,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Create a Transaction with a value below -£25 and Minimum Charge set to FALSE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2018\",\r\n    \"periodEnd\": \"31-MAR-2019\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"325\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": false,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Create a Transaction with Minimum Charge set to True with a Charge Value of over £25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"3654\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref2}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref2}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Create a Transaction with Minimum Charge set to True with a Charge Value of over -£25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"3654\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref3}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref3}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "6. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "7. Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is below £25 and minimum charge set to FALSE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Bill Run Summary shows Minimum Charge transaction is not created when the transaction value is below £25 and minimum charge set to FALSE\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is not 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.not.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is not 2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.not.eql(2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "8. Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is below -£25 and minimum charge set to FALSE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Bill Run Summary shows Minimum Charge transaction is not created when the transaction value is above -£25 and minimum charge set to FALSE\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref1)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is not 2500\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.not.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is not 2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.not.eql(-2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "9. Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is above £25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Bill Run Summary shows Minimum Charge transaction is not created when the transaction value is above £25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref2)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is above 2500\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.be.above(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is above 2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.be.above(2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "10. Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is above -£25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Bill Run Summary shows Minimum Charge transaction is not created when the transaction value is below -£25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref3)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is over 2500\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.be.above(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is above 2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.be.below(-2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "11. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12. Create a Transaction with Minimum Charge set to True with a Charge Value of £25 exactly",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"443.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "13. Create a Transaction with Minimum Charge set to True with a Charge Value of -£25 exactly (different invoice)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"443.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "14. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "15. Bill Run Summary shows Minimum Charge transaction is not created when the transaction value is equal to £25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Bill Run Summary shows Minimum Charge transaction is not created when the transaction value is equal to £25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary invoiceCount is 1\", function () {\r",
+									"    pm.expect(response.billRun.invoiceCount).to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary invoiceValue is 2500\", function () {\r",
+									"    pm.expect(response.billRun.invoiceValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary creditNoteCount is 1\", function () {\r",
+									"    pm.expect(response.billRun.creditNoteCount).to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary creditNoteValue is 0\", function () {\r",
+									"    pm.expect(response.billRun.creditNoteValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary netTotal is 0\", function () {\r",
+									"    pm.expect(response.billRun.netTotal).to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "16. Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is equal to £25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge transaction is not created when transaction value is equal to £25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"//Capture invoice ID\r",
+									"pm.environment.set(\"invoice_id\", invoiceArray.id);\r",
+									"\r",
+									"//Capture licence ID\r",
+									"pm.environment.set(\"licence_id\", invoiceArray.licences.id);\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is not 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.not.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is returned and is not 0\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.not.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "17. Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is equal to -£25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is equal to -£25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref1)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is not 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.not.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is returned and is not 0\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.not.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "18. Transaction is not Minimum Charge Adjusment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"const licenceInfo = response.invoice.licences.find(element => element.licenceNumber === environment.licence_num)\r",
+									"const transactionInfo = licenceInfo.transactions[0]\r",
+									"\r",
+									"console.log(transactionInfo)\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge adjustment field is false\", function () {\r",
+									"    pm.expect(transactionInfo.minimumChargeAdjustment).to.eql(false);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/invoices/{{invoice_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"invoices",
+								"{{invoice_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "19. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "20. Create a Transaction with Minimum Charge set to True with a Charge Value of £0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "21. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "22. Bill Run Summary shows Minimum Charge transaction is not created when the transaction value is equal to 0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Bill Run Summary shows Minimum Charge transaction is not created when the transaction value is equal to 0\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary invoiceCount is 0\", function () {\r",
+									"    pm.expect(response.billRun.invoiceCount).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary invoiceValue is 0\", function () {\r",
+									"    pm.expect(response.billRun.invoiceValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary creditNoteCount is 0\", function () {\r",
+									"    pm.expect(response.billRun.creditNoteCount).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary creditNoteValue is 0\", function () {\r",
+									"    pm.expect(response.billRun.creditNoteValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary netTotal is 0\", function () {\r",
+									"    pm.expect(response.billRun.netTotal).to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "23. Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is equal to 0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge transaction is not created when the transaction value is equal to 0\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is 0\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "24. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "25. Create a positive Minimum Charge transaction with a value of £24.99",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"443\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "26. Create another positive Minimum Charge transaction with a value of £0.01 to the same group as previous transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "27. Create a negative Minimum Charge transaction with a value of -£24.99",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"443\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "28. Create another negative Minimum Charge transaction with a value of -£0.01 to the same group as previous transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "29. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "30. Invoice Level Summary shows Minimum Charge is not applied if multiple transactions in the same group add up to £25 with Minimum Charge set to TRUE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge is NOT applied if multiple transactions in the same group add up to £25 with Minimum Charge set to TRUE\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "31. Invoice Level Summary shows Minimum Charge is not applied if multiple transactions in the same group add up to -£25 with Minimum Charge set to TRUE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge is NOT applied if multiple transactions in the same group add up to £25 with Minimum Charge set to TRUE\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref1)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is -2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(-2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "32. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "33. Create a positive Transaction with Minimum Charge set to True with a Charge Value of £24.99",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"443\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "34. Create a negative Transaction with Minimum Charge set to True with a Charge Value of -£24.99",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id1\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"443\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num1}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num1}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "35. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "36. Bill Run status is \"generated\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"if (response.status !== \"generated\") {\r",
+									"    setTimeout(() => {}, 1000);\r",
+									"    postman.setNextRequest(pm.info.requestId);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"status"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "37. Bill Run Summary shows Minimum Charge transaction is created when the transaction value is below £25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Bill Run Summary shows Minimum Charge transaction is created when the transaction value is below £25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary invoiceCount is 1\", function () {\r",
+									"    pm.expect(response.billRun.invoiceCount).to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary invoiceValue is 2500\", function () {\r",
+									"    pm.expect(response.billRun.invoiceValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary creditNoteCount is 1\", function () {\r",
+									"    pm.expect(response.billRun.creditNoteCount).to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary creditNoteValue is 2500\", function () {\r",
+									"    pm.expect(response.billRun.creditNoteValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary netTotal is 0\", function () {\r",
+									"    pm.expect(response.billRun.netTotal).to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "38. Invoice Level Summary shows Minimum Charge transaction is created when the transaction value is below £25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge transaction is created when the transaction value is below £25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"//Capture invoice ID\r",
+									"pm.environment.set(\"invoice_id\", invoiceArray.id);\r",
+									"\r",
+									"//Capture licence ID\r",
+									"pm.environment.set(\"licence_id\", invoiceArray.licences[0].id);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "39. Invoice Level Summary shows Minimum Charge transaction is created when the transaction value is above -£25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge transaction is created when the transaction value is below £25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref1)\r",
+									"\r",
+									"//Capture invoice ID\r",
+									"pm.environment.set(\"invoice_id1\", invoiceArray.id);\r",
+									"\r",
+									"//Capture licence ID\r",
+									"pm.environment.set(\"licence_id1\", invoiceArray.licences[0].id);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is -2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(-2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "40. Minimum Charge is retained in the transaction record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"//Capture invoice matching transaction ID\r",
+									"const licenceInfo = response.invoice.licences.find(element => element.id === environment.licence_id)\r",
+									"const transactionInfo = licenceInfo.transactions.find(element => element.id === environment.transaction_id)\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge is retained in the transaction record\", function () {\r",
+									"    pm.expect(transactionInfo.subjectToMinimumCharge).to.eql(true);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/invoices/{{invoice_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"invoices",
+								"{{invoice_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "41. Minimum Charge is retained in the transaction record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"//Capture original transaction information matching transaction ID to drill into objects  \r",
+									"const licenceInfo = response.invoice.licences.find(element => element.id === environment.licence_id1)\r",
+									"const transactionInfo = licenceInfo.transactions.find(element => element.id === environment.transaction_id1)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge is retained in the transaction record\", function () {\r",
+									"    pm.expect(transactionInfo.subjectToMinimumCharge).to.eql(true);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/invoices/{{invoice_id1}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"invoices",
+								"{{invoice_id1}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "42. Min Charge adjustment transaction is flagged as relating to a minimum charge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"//Capture original transaction information matching transaction ID to drill into objects  \r",
+									"const licenceInfo = response.invoice.licences.find(element => element.id === environment.licence_id)\r",
+									"const transactionInfo = licenceInfo.transactions.find(element => element.id === environment.transaction_id)\r",
+									"\r",
+									"//Capture Minimum Charge adjustment transaction information\r",
+									"const minChargetransactionInfo = licenceInfo.transactions.find(element => element.id !== environment.transaction_id)\r",
+									"\r",
+									"//Set transaction ID for future referral\r",
+									"pm.environment.set(\"transaction_id2\", minChargetransactionInfo.id);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Transaction ID not null\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify transaction is a Minimum Charge adjustment\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.minimumChargeAdjustment).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge adjustment\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.subjectToMinimumCharge).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge adjustment value is equal to difference between original transaction and -£25\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.chargeValue).to.eql(2500-transactionInfo.chargeValue);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify correct Minimum Charge adjustment line description\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.lineDescription).to.eql(\"Minimum Charge Calculation - raised under Schedule 23 of the Environment Act 1995\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge adjustment chargeValue sign is the same as the original transaction\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.credit).to.eql(transactionInfo.credit);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/invoices/{{invoice_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"invoices",
+								"{{invoice_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "43. Min Charge adjustment transaction is flagged as relating to a minimum charge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"//Capture original transaction information matching transaction ID to drill into objects  \r",
+									"const licenceInfo = response.invoice.licences.find(element => element.id === environment.licence_id1)\r",
+									"const transactionInfo = licenceInfo.transactions.find(element => element.id === environment.transaction_id1)\r",
+									"\r",
+									"//Capture Minimum Charge adjustment transaction information\r",
+									"const minChargetransactionInfo = licenceInfo.transactions.find(element => element.id !== environment.transaction_id1)\r",
+									"\r",
+									"//Set transaction ID for future referral\r",
+									"pm.environment.set(\"transaction_id3\", minChargetransactionInfo.id);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Transaction ID not null\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify transaction is a Minimum Charge adjustment\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.minimumChargeAdjustment).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge adjustment\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.subjectToMinimumCharge).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge adjustment value is equal to difference between original transaction and -£25\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.chargeValue).to.eql(2500-transactionInfo.chargeValue);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify correct Minimum Charge adjustment line description\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.lineDescription).to.eql(\"Minimum Charge Calculation - raised under Schedule 23 of the Environment Act 1995\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Minimum Charge adjustment chargeValue sign is the same as the original transaction\", function () {\r",
+									"    pm.expect(minChargetransactionInfo.credit).to.eql(transactionInfo.credit);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/invoices/{{invoice_id1}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"invoices",
+								"{{invoice_id1}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "44. Capture positive Minimum Charge transaction details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify current status of the Bill Run is returned upon receipt of valid request\");\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Set transaction details for future referral\r",
+									"pm.environment.set(\"region\", response.region);\r",
+									"pm.environment.set(\"lineAreaCode\", response.lineAreaCode);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test/transactions/{{transaction_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test",
+								"transactions",
+								"{{transaction_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "45. Min Charge adjustment transaction details match parent group transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Region codes match\", function () {\r",
+									"    pm.expect(response.region).to.eql(environment.region);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Customer Refs match\", function () {\r",
+									"    pm.expect(response.customerReference).to.eql(environment.customer_ref);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Licence nums match\", function () {\r",
+									"    pm.expect(response.licence.licenceNumber).to.eql(environment.licence_num);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Area Codes match\", function () {\r",
+									"    pm.expect(response.lineAreaCode).to.eql(environment.lineAreaCode);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Numbers match\", function () {\r",
+									"    pm.expect(response.billRun.billRunNumber).to.eql(environment.billRun_number);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test/transactions/{{transaction_id2}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test",
+								"transactions",
+								"{{transaction_id2}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "46. Capture negative Minimum Charge transaction details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Set transaction details for future referral\r",
+									"pm.environment.set(\"region\", response.region);\r",
+									"pm.environment.set(\"lineAreaCode\", response.lineAreaCode);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test/transactions/{{transaction_id1}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test",
+								"transactions",
+								"{{transaction_id1}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "47. Min Charge adjustment transaction details match parent group transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Region codes match\", function () {\r",
+									"    pm.expect(response.region).to.eql(environment.region);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Customer Refs match\", function () {\r",
+									"    pm.expect(response.customerReference).to.eql(environment.customer_ref1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Licence nums match\", function () {\r",
+									"    pm.expect(response.licence.licenceNumber).to.eql(environment.licence_num1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Area Codes match\", function () {\r",
+									"    pm.expect(response.lineAreaCode).to.eql(environment.lineAreaCode);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Numbers match\", function () {\r",
+									"    pm.expect(response.billRun.billRunNumber).to.eql(environment.billRun_number);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test/transactions/{{transaction_id3}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test",
+								"transactions",
+								"{{transaction_id3}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "48. Positive Min Charge adjustment transaction details are left blank",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Period Start value is blank\", function () {\r",
+									"    pm.expect(response.chargePeriodStart).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Period End value is blank\", function () {\r",
+									"    pm.expect(response.chargePeriodEnd).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Authorised days value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue5).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Pro-rata days value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr3).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Volume value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr5).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Source value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue6).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Source Factor value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr6).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Season value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue7).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Season Factor value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr7).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Loss value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue8).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Loss Factor value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr8).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"SUC value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr4).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"EIUC value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr14).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"EIUC Source value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue13).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"EIUC Source Factor value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr13).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Regional Charging Area value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue15).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Section 130 Agreement value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue9).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Section 127 Agreement value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue12).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Section 126 Factor value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue11).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Licence Holder Charge Agreement value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr9).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Charge Element Agreement value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr10).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Charge Element ID value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue3).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Two Part Tariff value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue16).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Compensation Charge value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue17).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Water Undertaker value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue14).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Date is blank\", function () {\r",
+									"    pm.expect(response.transactionDate).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Reference is blank\", function () {\r",
+									"    pm.expect(response.invoice.transactionReference).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Reference is blank\", function () {\r",
+									"    pm.expect(response.billRun.fileReference).to.eql(null);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test/transactions/{{transaction_id2}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test",
+								"transactions",
+								"{{transaction_id2}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "49. Negative Min Charge adjustment transaction details are left blank",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Period Start value is blank\", function () {\r",
+									"    pm.expect(response.chargePeriodStart).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Period End value is blank\", function () {\r",
+									"    pm.expect(response.chargePeriodEnd).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Authorised days value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue5).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Pro-rata days value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr3).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Volume value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr5).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Source value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue6).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Source Factor value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr6).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Season value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue7).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Season Factor value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr7).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Loss value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue8).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Loss Factor value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr8).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"SUC value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr4).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"EIUC value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr14).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"EIUC Source value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue13).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"EIUC Source Factor value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr13).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Regional Charging Area value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue15).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Section 130 Agreement value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue9).to.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Section 127 Agreement value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue12).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Section 126 Factor value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue11).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Licence Holder Charge Agreement value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr9).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Charge Element Agreement value is blank\", function () {\r",
+									"    pm.expect(response.lineAttr10).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Charge Element ID value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue3).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Two Part Tariff value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue16).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Compensation Charge value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue17).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Water Undertaker value is blank\", function () {\r",
+									"    pm.expect(response.regimeValue14).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Date is blank\", function () {\r",
+									"    pm.expect(response.transactionDate).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Reference is blank\", function () {\r",
+									"    pm.expect(response.invoice.transactionReference).to.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Reference is blank\", function () {\r",
+									"    pm.expect(response.billRun.fileReference).to.eql(null);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test/transactions/{{transaction_id3}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test",
+								"transactions",
+								"{{transaction_id3}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "50. Approve Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/approve",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"approve"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "51. Send Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/send",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"send"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "52. Positive Min Charge adjustment transaction date, type, reference and file reference are now populated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Transaction Reference is not blank\", function () {\r",
+									"    pm.expect(response.invoice.transactionReference).to.not.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Type is I\", function () {\r",
+									"    pm.expect(response.invoice.transactionType).to.eql(\"I\");\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Reference is not blank\", function () {\r",
+									"    pm.expect(response.billRun.fileReference).to.not.eql(null);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test/transactions/{{transaction_id2}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test",
+								"transactions",
+								"{{transaction_id2}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "53. Negative Min Charge adjustment transaction details are left blank Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Transaction Reference is not blank\", function () {\r",
+									"    pm.expect(response.invoice.transactionReference).to.not.eql(null);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Type is C\", function () {\r",
+									"    pm.expect(response.invoice.transactionType).to.eql(\"C\");\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Transaction Reference is not blank\", function () {\r",
+									"    pm.expect(response.billRun.fileReference).to.not.eql(null);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test/transactions/{{transaction_id3}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test",
+								"transactions",
+								"{{transaction_id3}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "54. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "55. Create a positive Minimum Charge Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "56. Create a positive Minimum Charge Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"243\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "57. Create a positive Minimum Charge Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"44\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "58. Create a negative Minimum Charge Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "59. Create a negative Minimum Charge Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"243\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "60. Create a negative Minimum Charge Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"44\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "61. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "62. Bill Run Summary shows Minimum Charge transaction is created when net group value is below £25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Bill Run Summary shows Minimum Charge transaction is created when net group value is below £25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary invoiceCount is 1\", function () {\r",
+									"    pm.expect(response.billRun.invoiceCount).to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary invoiceValue is 2500\", function () {\r",
+									"    pm.expect(response.billRun.invoiceValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary creditNoteCount is 1\", function () {\r",
+									"    pm.expect(response.billRun.creditNoteCount).to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary creditNoteValue is 2500\", function () {\r",
+									"    pm.expect(response.billRun.creditNoteValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Bill Run Summary netTotal is 0\", function () {\r",
+									"    pm.expect(response.billRun.netTotal).to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "63. Invoice Level Summary shows Minimum Charge transaction is created when net group value is below £25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge transaction is created when net group value is below £25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "64. Invoice Level Summary shows Minimum Charge transaction is created when net group value is above -£25",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Verify Invoice Level Summary shows Minimum Charge transaction is created when net group value is above -£25\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref1)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is -2500\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(-2500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "65. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "66. Create a positive Minimum Charge transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "67. Create another positive Minimum Charge transaction with different Licence Number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num1}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num1}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "68. Create a negative Minimum Charge transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num2}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num2}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "69. Create another negative Minimum Charge transaction with different Licence Number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref1}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num3}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref1}}_{{licence_num3}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "70. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "71. Bill Run status is \"generated\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"if (response.status !== \"generated\") {\r",
+									"    setTimeout(() => {}, 1000);\r",
+									"    postman.setNextRequest(pm.info.requestId);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"status"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "72. Invoice Level Summary shows seperate Minimum Charges are created for transactions with different Licence Numbers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Invoice Level Summary shows seperate Minimum Charges are created for transactions with different Licence Numbers\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 5000\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is 5000\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(5000);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "73. Invoice Level Summary shows seperate Minimum Charges are created for transactions with different Licence Numbers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Invoice Level Summary shows seperate Minimum Charges are created for transactions with different Licence Numbers\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref1)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 5000\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 0\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is returned and is false\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is -5000\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(-5000);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "74. Create a new Bill Run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"Create Bill Run - Region Y\");\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun ID is not null\", function () {\r",
+									"    console.log(\"Bill Run ID =\" + response.billRun.id);\r",
+									"    pm.expect(response.billRun.id).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Billrun Number is not null\", function () {\r",
+									"    console.log(\"Bill Run Number =\" + response.billRun.billRunNumber);\r",
+									"    pm.expect(response.billRun.billRunNumber).to.not.eql(null);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"billRun_id\", response.billRun.id);\r",
+									"pm.environment.set(\"billRun_number\", response.billRun.billRunNumber);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"region\": \"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "75. Create a Minimum Charge transaction with a positive sign",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": false,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "76. Create a Minimum Charge transaction with a negative sign in the same group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Creating a Transaction and adding to Bill run\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Transaction ID is not null\", function () {",
+									"    pm.expect(response.transaction.id).to.not.eql(null);",
+									"});",
+									"",
+									"pm.environment.set(\"transaction_id\", response.transaction.id);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"periodStart\": \"01-APR-2020\",\r\n    \"periodEnd\": \"31-MAR-2021\",\r\n    \"credit\": true,\r\n\t\"billableDays\": 310,\r\n\t\"authorisedDays\": 365,\r\n    \"volume\": \"0.1\",\r\n    \"source\": \"Tidal\",\r\n    \"season\": \"Summer\",\r\n    \"loss\": \"Low\",\r\n    \"twoPartTariff\": false,\r\n    \"compensationCharge\": false,\r\n    \"eiucSource\": \"Tidal\",\r\n    \"waterUndertaker\": false,\r\n    \"regionalChargingArea\": \"Thames\",\r\n    \"subjectToMinimumCharge\": true,\r\n\t\"section127Agreement\": true,\r\n\t\"section130Agreement\": false,\r\n    \"customerReference\": \"{{customer_ref}}\",\r\n    \"lineDescription\": \"Drains within Littleport & Downham IDB\",\r\n    \"licenceNumber\": \"{{licence_num}}\",\r\n    \"chargePeriod\": \"01-APR-2020 - 31-MAR-2021\",\r\n    \"chargeElementId\": \"1\",\r\n    \"batchNumber\": \"{{customer_ref}}_{{licence_num}}\",\r\n    \"region\": \"S\",\r\n    \"areaCode\": \"ARCA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"transactions"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "77. Generate Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}",
+								"generate"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				},
+				{
+					"name": "76. Invoice Level Summary shows seperate Minimum Charges are created for transactions in the same group but with different signs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"console.log(\"Invoice Level Summary shows seperate Minimum Charges are created for transactions in the same group but with different signs\");\r",
+									"\r",
+									"//Capture invoice matching customer ref\r",
+									"const invoiceArray = response.billRun.invoices.find(element => element.customerReference === environment.customer_ref)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary creditLineValue is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.creditLineValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary debitLineValue is 2500\", function () {\r",
+									"    pm.expect(invoiceArray.debitLineValue).to.eql(2500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary minimumChargeInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.minimumChargeInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary deminimisInvoice is false\", function () {\r",
+									"    pm.expect(invoiceArray.deminimisInvoice).to.eql(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary zeroValueInvoice is true\", function () {\r",
+									"    pm.expect(invoiceArray.zeroValueInvoice).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Invoice level Summary netTotal is 0\", function () {\r",
+									"    pm.expect(invoiceArray.netTotal).to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"wrls",
+								"bill-runs",
+								"{{billRun_id}}"
+							]
+						},
+						"description": "add transaction to queue"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"auth": {
