@@ -43516,7 +43516,7 @@
 							"response": []
 						},
 						{
-							"name": "37. \"C\" Rebilled invoice is confirmed as deleted Copy",
+							"name": "37. \"C\" Rebilled invoice is confirmed as deleted",
 							"event": [
 								{
 									"listen": "test",
@@ -43629,6 +43629,67 @@
 										"invoices",
 										"{{rebillInvoice_id}}",
 										"rebill"
+									]
+								},
+								"description": "add transaction to queue"
+							},
+							"response": []
+						},
+						{
+							"name": "Bill Run Status is not \"pending\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"\r",
+											"if (response.status !== \"initialised\") {\r",
+											"    setTimeout(() => {}, 1000);\r",
+											"    postman.setNextRequest(pm.info.requestId);\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}/status",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v2",
+										"wrls",
+										"bill-runs",
+										"{{billRun_id}}",
+										"status"
 									]
 								},
 								"description": "add transaction to queue"
@@ -44411,6 +44472,67 @@
 										"invoices",
 										"{{rebilledInvoice_id_R}}",
 										"rebill"
+									]
+								},
+								"description": "add transaction to queue"
+							},
+							"response": []
+						},
+						{
+							"name": "Bill Run Status is not \"pending\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"\r",
+											"if (response.status !== \"initialised\") {\r",
+											"    setTimeout(() => {}, 1000);\r",
+											"    postman.setNextRequest(pm.info.requestId);\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id1}}/status",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v2",
+										"wrls",
+										"bill-runs",
+										"{{billRun_id1}}",
+										"status"
 									]
 								},
 								"description": "add transaction to queue"
@@ -47990,6 +48112,68 @@
 							"response": []
 						},
 						{
+							"name": "Bill Run status is not \"pending\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"\r",
+											"if (response.billRun.status !== \"initialised\") {\r",
+											"    setTimeout(() => {}, 1000);\r",
+											"    postman.setNextRequest(pm.info.requestId);\r",
+											"}\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id5}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v2",
+										"wrls",
+										"bill-runs",
+										"{{billRun_id5}}"
+									]
+								},
+								"description": "add transaction to queue"
+							},
+							"response": []
+						},
+						{
 							"name": "100. Capture Rebill invoices",
 							"event": [
 								{
@@ -49442,6 +49626,68 @@
 							"response": []
 						},
 						{
+							"name": "Bill Run status is not \"pending\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"\r",
+											"if (response.billRun.status !== \"initialised\") {\r",
+											"    setTimeout(() => {}, 1000);\r",
+											"    postman.setNextRequest(pm.info.requestId);\r",
+											"}\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id7}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v2",
+										"wrls",
+										"bill-runs",
+										"{{billRun_id7}}"
+									]
+								},
+								"description": "add transaction to queue"
+							},
+							"response": []
+						},
+						{
 							"name": "125. Rebill invoices are present in new bill run",
 							"event": [
 								{
@@ -49753,6 +49999,68 @@
 										"invoices",
 										"{{rebillInvoice_id}}",
 										"rebill"
+									]
+								},
+								"description": "add transaction to queue"
+							},
+							"response": []
+						},
+						{
+							"name": "Bill Run status is not \"pending\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"\r",
+											"if (response.billRun.status !== \"initialised\") {\r",
+											"    setTimeout(() => {}, 1000);\r",
+											"    postman.setNextRequest(pm.info.requestId);\r",
+											"}\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id8}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v2",
+										"wrls",
+										"bill-runs",
+										"{{billRun_id8}}"
 									]
 								},
 								"description": "add transaction to queue"
@@ -50995,6 +51303,68 @@
 							"response": []
 						},
 						{
+							"name": "Bill Run status is not \"pending\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"\r",
+											"if (response.billRun.status !== \"initialised\") {\r",
+											"    setTimeout(() => {}, 1000);\r",
+											"    postman.setNextRequest(pm.info.requestId);\r",
+											"}\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v2",
+										"wrls",
+										"bill-runs",
+										"{{billRun_id}}"
+									]
+								},
+								"description": "add transaction to queue"
+							},
+							"response": []
+						},
+						{
 							"name": "151. Invoices with same Customer Ref & FY details can be Rebilled on the same Bill Run",
 							"event": [
 								{
@@ -51049,6 +51419,68 @@
 										"invoices",
 										"{{rebillInvoice_id1}}",
 										"rebill"
+									]
+								},
+								"description": "add transaction to queue"
+							},
+							"response": []
+						},
+						{
+							"name": "Bill Run status is not \"pending\"",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"\r",
+											"if (response.billRun.status !== \"initialised\") {\r",
+											"    setTimeout(() => {}, 1000);\r",
+											"    postman.setNextRequest(pm.info.requestId);\r",
+											"}\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v2/wrls/bill-runs/{{billRun_id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v2",
+										"wrls",
+										"bill-runs",
+										"{{billRun_id}}"
 									]
 								},
 								"description": "add transaction to queue"
